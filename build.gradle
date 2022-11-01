@@ -1,0 +1,55 @@
+plugins {
+    id 'java'
+    // below plugin will enable cucumber configuration in build.gradle
+    id "se.thinkcode.cucumber-runner" version "0.0.8"
+}
+
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+
+// Versioning of dependencies
+def cucumberVersion = '6.11.0'
+def junitVersion = '5.7.2'
+def selenideVersion = '5.24.0'
+def lombokVersion = '1.18.20'
+def assertJVersion = '3.20.2'
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "io.cucumber:cucumber-java:${cucumberVersion}"
+    implementation "io.cucumber:cucumber-junit:${cucumberVersion}"
+    implementation "com.codeborne:selenide:${selenideVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+    testImplementation "org.junit.vintage:junit-vintage-engine:${junitVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    testImplementation "org.assertj:assertj-core:${assertJVersion}"
+
+}
+
+def threadsCount = System.getProperty("threads")
+def cucumberTags = System.getProperty("cucumberTags")
+
+cucumber {
+    threads = threadsCount ? threadsCount : '1'
+    glue = 'classpath:steps'
+    plugin = ['pretty']
+    tags = cucumberTags ? cucumberTags : ''
+    name = ''
+    dryRun = ''
+    snippets = ''
+    version = ''
+    i18n = ''
+    wip = ''
+
+    featurePath = 'src/test/resources/features'
+    main = 'io.cucumber.core.cli.Main'
+}
